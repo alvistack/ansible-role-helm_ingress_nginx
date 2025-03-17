@@ -2,6 +2,8 @@
 
 ## 11.4.0 - TBC
 
+- Simplify with Helm
+
 ## 11.3.0 - 2025-02-27
 
 - Support Ansible community package 11.3.0

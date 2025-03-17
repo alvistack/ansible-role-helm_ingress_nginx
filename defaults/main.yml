@@ -14,12 +14,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Nginx configuration with ConfigMap.
-kube_ingress_nginx_configmap_ingress_nginx_controller:
-  allow-snippet-annotations: "true"
-  http-snippet: |
-    proxy_cache_path /tmp/nginx/proxy-cache levels=1:2 keys_zone=cache:10m max_size=128m inactive=10m use_temp_path=off;
-    proxy_cache cache;
-    proxy_cache_valid 200 1s;
-    proxy_cache_lock on;
-    proxy_cache_use_stale updating;
+# Release name to manage.
+kube_ingress_nginx_helm_release_name: ingress-nginx
+
+# Kubernetes namespace where the chart should be installed.
+kube_ingress_nginx_helm_release_namespace: ingress-nginx
+
+# Value to pass to chart.
+kube_ingress_nginx_helm_release_values:
+  controller:
+    config:
+      http-snippet: |
+        proxy_cache_path /tmp/nginx/proxy-cache levels=1:2 keys_zone=cache:10m max_size=128m inactive=10m use_temp_path=off;
+        proxy_cache cache;
+        proxy_cache_valid 200 1s;
+        proxy_cache_lock on;
+        proxy_cache_use_stale updating;
+    dnsPolicy: ClusterFirstWithHostNet
+    reportNodeInternalIp: true
+    allowSnippetAnnotations: true
+    hostNetwork: true
+    hostPort:
+      enabled: true
+      ports:
+        http: 80
+        https: 443
+    kind: DaemonSet
+    service:
+      enabled: false
