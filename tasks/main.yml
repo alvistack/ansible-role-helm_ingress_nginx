@@ -61,7 +61,6 @@
     state: "{{ item.state | default('directory') }}"
   loop:
     - { dest: /etc/kubernetes/charts }
-    - { dest: /etc/kubernetes/charts/ingress-nginx }
   when: inventory_hostname == ansible_play_hosts[0]
 
 - name: rsync directories
