@@ -28,6 +28,6 @@ roles:
     src: https://github.com/alvistack/ansible-role-helm
     version: develop
 
-  - name: alvistack.kube_cilium
-    src: https://github.com/alvistack/ansible-role-kube_cilium
+  - name: alvistack.helm_cilium
+    src: https://github.com/alvistack/ansible-role-helm_cilium
     version: develop
