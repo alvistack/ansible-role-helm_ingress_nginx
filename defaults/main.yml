@@ -15,13 +15,13 @@
 # limitations under the License.
 
 # Release name to manage.
-kube_ingress_nginx_helm_release_name: ingress-nginx
+helm_ingress_nginx_helm_release_name: ingress-nginx
 
 # Kubernetes namespace where the chart should be installed.
-kube_ingress_nginx_helm_release_namespace: ingress-nginx
+helm_ingress_nginx_helm_release_namespace: ingress-nginx
 
 # Value to pass to chart.
-kube_ingress_nginx_helm_release_values:
+helm_ingress_nginx_helm_release_values:
   controller:
     config:
       http-snippet: |

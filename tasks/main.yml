@@ -88,8 +88,8 @@
 
 - name: helm install
   kubernetes.core.helm:
-    release_name: "{{ kube_ingress_nginx_helm_release_name }}"
-    release_namespace: "{{ kube_ingress_nginx_helm_release_namespace }}"
+    release_name: "{{ helm_ingress_nginx_helm_release_name }}"
+    release_namespace: "{{ helm_ingress_nginx_helm_release_namespace }}"
     chart_ref: /etc/kubernetes/charts/ingress-nginx
     values_files: /etc/kubernetes/charts/ingress-nginx.values.yaml
     create_namespace: true
