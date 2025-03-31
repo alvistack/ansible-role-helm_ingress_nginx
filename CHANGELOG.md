@@ -1,7 +1,10 @@
 # Ansible Role for NGINX Ingress Controller with Helm
 
-## 11.4.0 - TBC
+## 11.5.0 - TBC
 
+## 11.4.0 - 2025-03-31
+
+- Support Ansible community package 11.4.0
 - Rename prefix with `helm_`
 - Simplify with Helm
 
