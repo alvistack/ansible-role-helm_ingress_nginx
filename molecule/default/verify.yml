@@ -114,6 +114,11 @@
                           name: nginx
                           port:
                             number: 80
+      when: inventory_hostname == groups['kube_master'][0]
+      register: result
+      until: result is succeeded
+      changed_when: result is not succeeded
+      retries: 60
 
     - name: curl -skL
       ansible.builtin.shell:
