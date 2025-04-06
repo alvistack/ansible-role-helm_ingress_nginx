@@ -31,8 +31,99 @@
           kubectl get pod --all-namespaces | egrep -e 'ingress-nginx\s+ingress-nginx-controller-\S+\s+[0-9]+\/[0-9]+\s+Running'
       args:
         executable: /bin/bash
-      when: inventory_hostname == ansible_play_hosts[0]
+      when: inventory_hostname == groups['kube_master'][0]
       register: result
       changed_when: result is not succeeded
       until: result is succeeded
+      retries: 60
+
+    - name: create pod
+      vars:
+        ansible_python_interpreter: python3
+      kubernetes.core.k8s:
+        state: present
+        wait: true
+        definition:
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: nginx
+            namespace: default
+            labels:
+              app: nginx
+          spec:
+            containers:
+              - name: nginx
+                image: docker.io/library/nginx:latest
+                imagePullPolicy: IfNotPresent
+                ports:
+                  - containerPort: 80
+      when: inventory_hostname == groups['kube_master'][0]
+      register: result
+      until: result is succeeded
+      changed_when: result is not succeeded
+      retries: 60
+
+    - name: create service
+      vars:
+        ansible_python_interpreter: python3
+      kubernetes.core.k8s:
+        state: present
+        wait: true
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: nginx
+            namespace: default
+          spec:
+            ports:
+              - name: nginx
+                port: 80
+                targetPort: 80
+            selector:
+              app: nginx
+            type: ClusterIP
+      when: inventory_hostname == groups['kube_master'][0]
+      register: result
+      until: result is succeeded
+      changed_when: result is not succeeded
+      retries: 60
+
+    - name: create ingress
+      vars:
+        ansible_python_interpreter: python3
+      kubernetes.core.k8s:
+        state: present
+        wait: true
+        definition:
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          metadata:
+            name: ingress-nginx
+            namespace: default
+          spec:
+            ingressClassName: nginx
+            rules:
+              - http:
+                  paths:
+                    - path: /
+                      pathType: Prefix
+                      backend:
+                        service:
+                          name: nginx
+                          port:
+                            number: 80
+
+    - name: curl -skL
+      ansible.builtin.shell:
+        cmd: |
+          set -euxo pipefail
+          curl -skL http://localhost:80
+      args:
+        executable: /bin/bash
+      when: inventory_hostname == groups['kube_master'][0]
+      register: result
+      until: result is succeeded
+      changed_when: result is not succeeded
       retries: 60

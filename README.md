@@ -7,7 +7,7 @@
 [![GitHub license](https://img.shields.io/github/license/alvistack/ansible-role-helm_ingress_nginx.svg)](https://github.com/alvistack/ansible-role-helm_ingress_nginx/blob/master/LICENSE)
 [![Ansible Role](https://img.shields.io/badge/galaxy-alvistack.helm_ingress_nginx-blue.svg)](https://galaxy.ansible.com/alvistack/helm_ingress_nginx)
 
-Ansible Role for NGINX Ingress Controller with Helm Installation.
+Ansible Role for NGINX Ingress Controller with Helm.
 
 ## Requirements
 
