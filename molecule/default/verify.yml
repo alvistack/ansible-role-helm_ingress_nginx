@@ -60,8 +60,8 @@
                   - containerPort: 80
       when: inventory_hostname == groups['kube_master'][0]
       register: result
-      until: result is succeeded
       changed_when: result is not succeeded
+      until: result is succeeded
       retries: 60
 
     - name: create service
@@ -86,8 +86,8 @@
             type: ClusterIP
       when: inventory_hostname == groups['kube_master'][0]
       register: result
-      until: result is succeeded
       changed_when: result is not succeeded
+      until: result is succeeded
       retries: 60
 
     - name: create ingress
@@ -116,8 +116,8 @@
                             number: 80
       when: inventory_hostname == groups['kube_master'][0]
       register: result
-      until: result is succeeded
       changed_when: result is not succeeded
+      until: result is succeeded
       retries: 60
 
     - name: curl -skL
@@ -129,6 +129,6 @@
         executable: /bin/bash
       when: inventory_hostname == groups['kube_master'][0]
       register: result
-      until: result is succeeded
       changed_when: result is not succeeded
+      until: result is succeeded
       retries: 60
