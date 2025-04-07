@@ -132,3 +132,57 @@
       changed_when: result is not succeeded
       until: result is succeeded
       retries: 60
+
+    - name: delete ingress
+      vars:
+        ansible_python_interpreter: python3
+      kubernetes.core.k8s:
+        state: absent
+        wait: true
+        definition:
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          metadata:
+            name: ingress-nginx
+            namespace: default
+      when: inventory_hostname == groups['kube_master'][0]
+      register: result
+      changed_when: result is not succeeded
+      until: result is succeeded
+      retries: 60
+
+    - name: delete service
+      vars:
+        ansible_python_interpreter: python3
+      kubernetes.core.k8s:
+        state: absent
+        wait: true
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: nginx
+            namespace: default
+      when: inventory_hostname == groups['kube_master'][0]
+      register: result
+      changed_when: result is not succeeded
+      until: result is succeeded
+      retries: 60
+
+    - name: delete pod
+      vars:
+        ansible_python_interpreter: python3
+      kubernetes.core.k8s:
+        state: absent
+        wait: true
+        definition:
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: nginx
+            namespace: default
+      when: inventory_hostname == groups['kube_master'][0]
+      register: result
+      changed_when: result is not succeeded
+      until: result is succeeded
+      retries: 60
