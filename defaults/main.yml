@@ -23,6 +23,12 @@ helm_ingress_nginx_helm_release_namespace: ingress-nginx
 # Value to pass to chart.
 helm_ingress_nginx_helm_release_values:
   controller:
+    image:
+      pullPolicy: IfNotPresent
+    admissionWebhooks:
+      patch:
+        image:
+          pullPolicy: IfNotPresent
     config:
       http-snippet: |
         proxy_cache_path /tmp/nginx/proxy-cache levels=1:2 keys_zone=cache:10m max_size=128m inactive=10m use_temp_path=off;
