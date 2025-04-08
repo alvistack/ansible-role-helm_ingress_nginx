@@ -45,6 +45,7 @@ helm_ingress_nginx_helm_release_values:
       ports:
         http: 80
         https: 443
-    kind: DaemonSet
+    kind: Deployment
+    replicaCount: 1
     service:
       enabled: false
