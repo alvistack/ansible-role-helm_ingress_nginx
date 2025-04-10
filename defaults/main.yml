@@ -45,6 +45,10 @@ helm_ingress_nginx_helm_release_values:
       ports:
         http: 80
         https: 443
+    ingressClassResource:
+      name: nginx
+      enabled: true
+      default: true
     kind: Deployment
     replicaCount: 1
     service:
