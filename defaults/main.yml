@@ -52,4 +52,4 @@ helm_ingress_nginx_helm_release_values:
     kind: Deployment
     replicaCount: 1
     service:
-      enabled: false
+      type: NodePort
