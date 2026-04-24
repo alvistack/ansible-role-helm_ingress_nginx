@@ -23,6 +23,14 @@ helm_ingress_nginx_use_proxy_protocol: false
 # If true, NGINX passes the incoming X-Forwarded-* headers to upstreams.
 helm_ingress_nginx_use_forwarded_headers: true
 
+# Sets the header field for identifying the originating IP address of a client.
+helm_ingress_nginx_forwarded_for_header: X-Forwarded-For
+
+# Sets the name of the intermediate header used to determine the client's
+# originating IP when both use-proxy-protocol and use-forwarded-headers
+# are enabled.
+helm_ingress_nginx_forwarded_for_proxy_protocol_header: X-Forwarded-For
+
 # Defines the default IP/network address of your external load balancer.
 helm_ingress_nginx_proxy_real_ip_cidr: 224.0.0.0/4,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.1
 
@@ -51,6 +59,8 @@ helm_ingress_nginx_helm_release_values:
       use-gzip: "{{ helm_ingress_nginx_use_gzip | bool | lower }}"
       use-proxy-protocol: "{{ helm_ingress_nginx_use_proxy_protocol | bool | lower }}"
       use-forwarded-headers: "{{ helm_ingress_nginx_use_forwarded_headers | bool | lower }}"
+      forwarded-for-header: "{{ helm_ingress_nginx_forwarded_for_header }}"
+      forwarded-for-proxy-protocol-header: "{{ helm_ingress_nginx_forwarded_for_proxy_protocol_header }}"
       proxy-real-ip-cidr: "{{ helm_ingress_nginx_proxy_real_ip_cidr }}"
       enable-real-ip: "{{ helm_ingress_nginx_enable_real_ip | bool | lower }}"
       compute-full-forwarded-for: "{{ helm_ingress_nginx_compute_full_forwarded_for | bool | lower }}"
