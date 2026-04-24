@@ -14,6 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Enables or disables compression of HTTP responses using the "gzip" module.
+helm_ingress_nginx_use_gzip: true
+
+# Enables or disables the PROXY protocol.
+helm_ingress_nginx_use_proxy_protocol: false
+
+# If true, NGINX passes the incoming X-Forwarded-* headers to upstreams.
+helm_ingress_nginx_use_forwarded_headers: true
+
+# Defines the default IP/network address of your external load balancer.
+helm_ingress_nginx_proxy_real_ip_cidr: 224.0.0.0/4,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.1
+
 # Release name to manage.
 helm_ingress_nginx_helm_release_name: ingress-nginx
 
@@ -30,10 +42,10 @@ helm_ingress_nginx_helm_release_values:
         image:
           pullPolicy: IfNotPresent
     config:
-      use-gzip: true
-      use-proxy-protocol: false
-      use-forwarded-headers: true
-      proxy-real-ip-cidr: 224.0.0.0/4,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.1
+      use-gzip: "{{ helm_ingress_nginx_use_gzip | bool | lower }}"
+      use-proxy-protocol: "{{ helm_ingress_nginx_use_proxy_protocol | bool | lower }}"
+      use-forwarded-headers: "{{ helm_ingress_nginx_use_forwarded_headers | bool | lower }}"
+      proxy-real-ip-cidr: "{{ helm_ingress_nginx_proxy_real_ip_cidr }}"
       http-snippet: |
         proxy_cache_path /tmp/nginx/proxy-cache levels=1:2 keys_zone=cache:10m max_size=128m inactive=10m use_temp_path=off;
         proxy_cache cache;
