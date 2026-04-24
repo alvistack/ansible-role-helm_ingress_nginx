@@ -26,6 +26,12 @@ helm_ingress_nginx_use_forwarded_headers: true
 # Defines the default IP/network address of your external load balancer.
 helm_ingress_nginx_proxy_real_ip_cidr: 224.0.0.0/4,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.1
 
+# Enables the configuration of ngx_http_realip_module.
+helm_ingress_nginx_enable_real_ip: true
+
+# Append the remote address to the X-Forwarded-For header instead of replacing it.
+helm_ingress_nginx_compute_full_forwarded_for: true
+
 # Release name to manage.
 helm_ingress_nginx_helm_release_name: ingress-nginx
 
@@ -46,6 +52,8 @@ helm_ingress_nginx_helm_release_values:
       use-proxy-protocol: "{{ helm_ingress_nginx_use_proxy_protocol | bool | lower }}"
       use-forwarded-headers: "{{ helm_ingress_nginx_use_forwarded_headers | bool | lower }}"
       proxy-real-ip-cidr: "{{ helm_ingress_nginx_proxy_real_ip_cidr }}"
+      enable-real-ip: "{{ helm_ingress_nginx_enable_real_ip | bool | lower }}"
+      compute-full-forwarded-for: "{{ helm_ingress_nginx_compute_full_forwarded_for | bool | lower }}"
       http-snippet: |
         proxy_cache_path /tmp/nginx/proxy-cache levels=1:2 keys_zone=cache:10m max_size=128m inactive=10m use_temp_path=off;
         proxy_cache cache;
