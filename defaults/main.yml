@@ -48,6 +48,9 @@ helm_ingress_nginx_helm_release_namespace: ingress-nginx
 
 # Value to pass to chart.
 helm_ingress_nginx_helm_release_values:
+  global:
+    image:
+      registry: registry.k8s.io
   controller:
     image:
       pullPolicy: IfNotPresent
