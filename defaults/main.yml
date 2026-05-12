@@ -53,11 +53,14 @@ helm_ingress_nginx_helm_release_values:
       registry: registry.k8s.io
   controller:
     image:
+      image: ingress-nginx/controller
       pullPolicy: IfNotPresent
       digest: ""
     admissionWebhooks:
       patch:
+        enabled: true
         image:
+          image: ingress-nginx/kube-webhook-certgen
           pullPolicy: IfNotPresent
           digest: ""
     config:
@@ -94,6 +97,8 @@ helm_ingress_nginx_helm_release_values:
       enabled: true
       type: NodePort
   defaultBackend:
+    enabled: false
     image:
+      image: defaultbackend-amd64
       pullPolicy: IfNotPresent
       digest: ""
