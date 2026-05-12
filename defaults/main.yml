@@ -54,10 +54,12 @@ helm_ingress_nginx_helm_release_values:
   controller:
     image:
       pullPolicy: IfNotPresent
+      digest: ""
     admissionWebhooks:
       patch:
         image:
           pullPolicy: IfNotPresent
+          digest: ""
     config:
       use-gzip: "{{ helm_ingress_nginx_use_gzip | bool | lower }}"
       use-proxy-protocol: "{{ helm_ingress_nginx_use_proxy_protocol | bool | lower }}"
@@ -89,4 +91,9 @@ helm_ingress_nginx_helm_release_values:
     kind: Deployment
     replicaCount: 1
     service:
+      enabled: true
       type: NodePort
+  defaultBackend:
+    image:
+      pullPolicy: IfNotPresent
+      digest: ""
