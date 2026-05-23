@@ -66,8 +66,10 @@ helm_ingress_nginx_helm_release_values:
           pullPolicy: IfNotPresent
           digest: ""
     config:
-      force-ssl-redirect: true
-      ssl-reject-handshake: true
+      hsts: "true"
+      ssl-redirect: "true"
+      force-ssl-redirect: "true"
+      ssl-reject-handshake: "true"
       use-gzip: "{{ helm_ingress_nginx_use_gzip | bool | lower }}"
       use-proxy-protocol: "{{ helm_ingress_nginx_use_proxy_protocol | bool | lower }}"
       use-forwarded-headers: "{{ helm_ingress_nginx_use_forwarded_headers | bool | lower }}"
