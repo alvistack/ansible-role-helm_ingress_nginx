@@ -50,15 +50,17 @@ helm_ingress_nginx_helm_release_namespace: ingress-nginx
 helm_ingress_nginx_helm_release_values:
   global:
     image:
-      registry: registry.k8s.io
+      registry: ghcr.io/forkline
   controller:
     image:
+      registry: ghcr.io/forkline
       image: ingress-nginx/controller
       pullPolicy: IfNotPresent
       digest: ""
     admissionWebhooks:
       patch:
         enabled: true
+        registry: ghcr.io/forkline
         image:
           image: ingress-nginx/kube-webhook-certgen
           pullPolicy: IfNotPresent
@@ -99,6 +101,7 @@ helm_ingress_nginx_helm_release_values:
   defaultBackend:
     enabled: false
     image:
+      registry: ghcr.io/forkline
       image: defaultbackend-amd64
       pullPolicy: IfNotPresent
       digest: ""
