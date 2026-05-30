@@ -105,7 +105,8 @@
           spec:
             ingressClassName: nginx
             rules:
-              - http:
+              - host: "{{ inventory_hostname }}"
+                http:
                   paths:
                     - path: /
                       pathType: Prefix
@@ -124,7 +125,7 @@
       ansible.builtin.shell:
         cmd: |
           set -euxo pipefail
-          curl -skL http://localhost:80
+          curl -skL https://{{ inventory_hostname }}
       args:
         executable: /bin/bash
       when: inventory_hostname == groups['kube_master'][0]
