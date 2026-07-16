@@ -79,9 +79,8 @@ helm_ingress_nginx_helm_release_values:
       proxy-real-ip-cidr: "{{ helm_ingress_nginx_proxy_real_ip_cidr }}"
       enable-real-ip: "{{ helm_ingress_nginx_enable_real_ip | bool | lower }}"
       compute-full-forwarded-for: "{{ helm_ingress_nginx_compute_full_forwarded_for | bool | lower }}"
-      main-snippet: |
-        proxy_cache_path /tmp/nginx/proxy-cache levels=1:2 keys_zone=cache:10m max_size=128m inactive=10m use_temp_path=off;
       http-snippet: |
+        proxy_cache_path /tmp/nginx/proxy-cache levels=1:2 keys_zone=cache:10m max_size=128m inactive=10m use_temp_path=off;
         map $http_origin $cors_origin {
             default "";
             "~^https?://(localhost|example\.com|.*\.example\.com)$" $http_origin;
