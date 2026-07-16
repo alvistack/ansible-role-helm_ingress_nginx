@@ -81,11 +81,7 @@ helm_ingress_nginx_helm_release_values:
       compute-full-forwarded-for: "{{ helm_ingress_nginx_compute_full_forwarded_for | bool | lower }}"
       http-snippet: |
         proxy_cache_path /tmp/nginx/proxy-cache levels=1:2 keys_zone=cache:10m max_size=128m inactive=10m use_temp_path=off;
-        map $http_origin $cors_origin {
-            default "";
-            "~^https?://(localhost|example\.com|.*\.example\.com)$" $http_origin;
-        }
-        proxy_cache_key "$scheme$request_method$proxy_host$request_uri$cors_origin";
+        proxy_cache_key "$scheme$request_method$proxy_host$request_uri$http_origin";
       location-snippet: |
         proxy_cache cache;
         proxy_cache_valid 200 1s;
