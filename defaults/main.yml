@@ -79,13 +79,19 @@ helm_ingress_nginx_helm_release_values:
       proxy-real-ip-cidr: "{{ helm_ingress_nginx_proxy_real_ip_cidr }}"
       enable-real-ip: "{{ helm_ingress_nginx_enable_real_ip | bool | lower }}"
       compute-full-forwarded-for: "{{ helm_ingress_nginx_compute_full_forwarded_for | bool | lower }}"
-      http-snippet: |
+      main-snippet: |
         proxy_cache_path /tmp/nginx/proxy-cache levels=1:2 keys_zone=cache:10m max_size=128m inactive=10m use_temp_path=off;
+      http-snippet: |
+        map $http_origin $cors_origin {
+            default "";
+            "~^https?://(localhost|example\.com|.*\.example\.com)$" $http_origin;
+        }
+        proxy_cache_key "$scheme$request_method$proxy_host$request_uri$cors_origin";
+      location-snippet: |
         proxy_cache cache;
         proxy_cache_valid 200 1s;
         proxy_cache_lock on;
         proxy_cache_use_stale updating error timeout http_500 http_502 http_503 http_504;
-        proxy_cache_key "$scheme$request_method$proxy_host$request_uri$http_origin";
         if ($request_method = 'OPTIONS') {
             add_header 'Access-Control-Allow-Origin' $cors_origin always;
             add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS' always;
