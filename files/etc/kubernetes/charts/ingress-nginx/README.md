@@ -2,7 +2,7 @@
 
 [ingress-nginx](https://github.com/kubernetes/ingress-nginx) Ingress controller for Kubernetes using NGINX as a reverse proxy and load balancer
 
-![Version: 2026.7.20](https://img.shields.io/badge/Version-2026.7.20-informational?style=flat-square) ![AppVersion: 2026.7.20](https://img.shields.io/badge/AppVersion-2026.7.20-informational?style=flat-square)
+![Version: 2026.8.16](https://img.shields.io/badge/Version-2026.8.16-informational?style=flat-square) ![AppVersion: 2026.8.16](https://img.shields.io/badge/AppVersion-2026.8.16-informational?style=flat-square)
 
 To use, add `ingressClassName: nginx` spec field or the `kubernetes.io/ingress.class: nginx` annotation to your Ingress resources.
 
@@ -12,20 +12,21 @@ This chart bootstraps an ingress-nginx deployment on a [Kubernetes](http://kuber
 
 Kubernetes: `>=1.21.0-0`
 
-## Get Repo Info
-
-```console
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm repo update
-```
-
 ## Install Chart
 
 **Important:** only helm3 is supported
 
 ```console
-helm install [RELEASE_NAME] ingress-nginx/ingress-nginx
+helm upgrade --install [RELEASE_NAME] oci://ghcr.io/forkline/helm-charts/ingress-nginx --version [VERSION]
 ```
+
+To install the latest version:
+
+```console
+helm upgrade --install [RELEASE_NAME] oci://ghcr.io/forkline/helm-charts/ingress-nginx
+```
+
+This chart uses date-based versioning (e.g. `2026.8.16`). The chart version matches the release tag.
 
 The command deploys ingress-nginx on the Kubernetes cluster in the default configuration.
 
@@ -69,7 +70,7 @@ Note that there are some different and upgraded configurations between the two c
 See [Customizing the Chart Before Installing](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing). To see all configurable options with detailed comments, visit the chart's [values.yaml](./values.yaml), or run these configuration commands:
 
 ```console
-helm show values ingress-nginx/ingress-nginx
+helm show values oci://ghcr.io/forkline/helm-charts/ingress-nginx
 ```
 
 ### PodDisruptionBudget
@@ -277,7 +278,7 @@ metadata:
 | controller.admissionWebhooks.patch.enabled | bool | `true` |  |
 | controller.admissionWebhooks.patch.image.image | string | `"ingress-nginx/kube-webhook-certgen"` |  |
 | controller.admissionWebhooks.patch.image.pullPolicy | string | `"IfNotPresent"` |  |
-| controller.admissionWebhooks.patch.image.tag | string | `"2026.7.20"` |  |
+| controller.admissionWebhooks.patch.image.tag | string | `"2026.8.16"` |  |
 | controller.admissionWebhooks.patch.labels | object | `{}` | Labels to be added to patch job resources |
 | controller.admissionWebhooks.patch.networkPolicy.enabled | bool | `false` | Enable 'networkPolicy' or not |
 | controller.admissionWebhooks.patch.nodeSelector."kubernetes.io/os" | string | `"linux"` |  |
@@ -355,7 +356,7 @@ metadata:
 | controller.image.runAsNonRoot | bool | `true` |  |
 | controller.image.runAsUser | int | `101` | This value must not be changed using the official image. uid=101(www-data) gid=82(www-data) groups=82(www-data) |
 | controller.image.seccompProfile.type | string | `"RuntimeDefault"` |  |
-| controller.image.tag | string | `"2026.7.20"` |  |
+| controller.image.tag | string | `"2026.8.16"` |  |
 | controller.ingressClass | string | `"nginx"` | For backwards compatibility with ingress.class annotation, use ingressClass. Algorithm is as follows, first ingressClassName is considered, if not present, controller looks for ingress.class annotation |
 | controller.ingressClassByName | bool | `false` | Process IngressClass per name (additionally as per spec.controller). |
 | controller.ingressClassResource | object | `{"aliases":[],"annotations":{},"controllerValue":"k8s.io/ingress-nginx","default":false,"enabled":true,"name":"nginx","parameters":{}}` | This section refers to the creation of the IngressClass resource. IngressClasses are immutable and cannot be changed after creation. We do not support namespaced IngressClasses, yet, so a ClusterRole and a ClusterRoleBinding is required. |
@@ -532,7 +533,7 @@ metadata:
 | defaultBackend.image.runAsNonRoot | bool | `true` |  |
 | defaultBackend.image.runAsUser | int | `65534` |  |
 | defaultBackend.image.seccompProfile.type | string | `"RuntimeDefault"` |  |
-| defaultBackend.image.tag | string | `"2026.7.20"` |  |
+| defaultBackend.image.tag | string | `"2026.8.16"` |  |
 | defaultBackend.labels | object | `{}` | Labels to be added to the default backend resources |
 | defaultBackend.livenessProbe.failureThreshold | int | `3` |  |
 | defaultBackend.livenessProbe.initialDelaySeconds | int | `30` |  |
