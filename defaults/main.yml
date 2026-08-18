@@ -81,10 +81,25 @@ helm_ingress_nginx_helm_release_values:
       compute-full-forwarded-for: "{{ helm_ingress_nginx_compute_full_forwarded_for | bool | lower }}"
       http-snippet: |
         proxy_cache_path /tmp/nginx/proxy-cache levels=1:2 keys_zone=cache:10m max_size=128m inactive=10m use_temp_path=off;
+        proxy_cache_key "$scheme$request_method$proxy_host$request_uri$http_origin";
+      location-snippet: |
         proxy_cache cache;
         proxy_cache_valid 200 1s;
         proxy_cache_lock on;
-        proxy_cache_use_stale updating;
+        proxy_cache_use_stale updating error timeout http_500 http_502 http_503 http_504;
+        if ($request_method = 'OPTIONS') {
+            add_header 'Access-Control-Allow-Origin' $http_origin always;
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS' always;
+            add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, Accept, Origin' always;
+            add_header 'Access-Control-Allow-Credentials' 'true' always;
+            add_header 'Access-Control-Max-Age' 86400 always;
+            add_header 'Content-Type' 'text/plain; charset=utf-8';
+            add_header 'Content-Length' 0;
+            return 204;
+        }
+        add_header 'Access-Control-Allow-Origin' $http_origin always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+        add_header 'Vary' 'Origin' always;
     dnsPolicy: ClusterFirstWithHostNet
     reportNodeInternalIp: true
     allowSnippetAnnotations: true
