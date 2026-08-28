@@ -66,6 +66,7 @@ helm_ingress_nginx_helm_release_values:
           pullPolicy: IfNotPresent
           digest: ""
     config:
+      proxy-buffering: "on"
       hsts: "true"
       ssl-redirect: "true"
       force-ssl-redirect: "true"
@@ -80,13 +81,15 @@ helm_ingress_nginx_helm_release_values:
       enable-real-ip: "{{ helm_ingress_nginx_enable_real_ip | bool | lower }}"
       compute-full-forwarded-for: "{{ helm_ingress_nginx_compute_full_forwarded_for | bool | lower }}"
       http-snippet: |
-        proxy_cache_path /tmp/nginx/proxy-cache levels=1:2 keys_zone=cache:10m max_size=128m inactive=10m use_temp_path=off;
+        proxy_cache_path /var/cache/nginx/proxy_cache levels=1:2 keys_zone=cache:10m max_size=128m inactive=10m use_temp_path=off;
         proxy_cache_key "$scheme$request_method$proxy_host$request_uri$http_origin";
       location-snippet: |
         proxy_cache cache;
         proxy_cache_valid 200 1s;
         proxy_cache_lock on;
+        proxy_ignore_headers Set-Cookie Cache-Control;
         proxy_cache_use_stale updating error timeout http_500 http_502 http_503 http_504;
+        add_header 'X-Cache-Status' $upstream_cache_status always;
         add_header 'Access-Control-Allow-Origin' $http_origin always;
         add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS' always;
         add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, Accept, Origin, X-Requested-With' always;
@@ -110,6 +113,13 @@ helm_ingress_nginx_helm_release_values:
     service:
       enabled: true
       type: NodePort
+    extraVolumes:
+      - name: var-cache-nginx-proxy-cache
+        emptyDir:
+          medium: Memory
+    extraVolumeMounts:
+      - name: var-cache-nginx-proxy-cache
+        mountPath: /var/cache/nginx/proxy_cache
   defaultBackend:
     enabled: false
     image:

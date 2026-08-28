@@ -126,6 +126,7 @@
         cmd: |
           set -euxo pipefail
           curl -skL https://{{ inventory_hostname }}
+          curl -skI https://{{ inventory_hostname }} | grep -i 'X-Cache-Status'
       args:
         executable: /bin/bash
       when: inventory_hostname == groups['kube_master'][0]
