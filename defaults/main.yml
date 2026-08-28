@@ -14,9 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Enables or disables compression of HTTP responses using the "gzip" module.
-helm_ingress_nginx_use_gzip: true
-
 # Enables or disables the PROXY protocol.
 helm_ingress_nginx_use_proxy_protocol: false
 
@@ -72,7 +69,7 @@ helm_ingress_nginx_helm_release_values:
       force-ssl-redirect: "true"
       ssl-reject-handshake: "true"
       use-http2: "false"
-      use-gzip: "{{ helm_ingress_nginx_use_gzip | bool | lower }}"
+      use-gzip: "true"
       use-proxy-protocol: "{{ helm_ingress_nginx_use_proxy_protocol | bool | lower }}"
       use-forwarded-headers: "{{ helm_ingress_nginx_use_forwarded_headers | bool | lower }}"
       forwarded-for-header: "{{ helm_ingress_nginx_forwarded_for_header }}"
