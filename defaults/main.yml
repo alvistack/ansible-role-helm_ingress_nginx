@@ -78,19 +78,37 @@ helm_ingress_nginx_helm_release_values:
       enable-real-ip: "{{ helm_ingress_nginx_enable_real_ip | bool | lower }}"
       compute-full-forwarded-for: "{{ helm_ingress_nginx_compute_full_forwarded_for | bool | lower }}"
       http-snippet: |
-        proxy_cache_path /var/cache/nginx/proxy_cache levels=1:2 keys_zone=cache:10m max_size=128m inactive=10m use_temp_path=off;
-        proxy_cache_key "$scheme$request_method$proxy_host$request_uri$http_origin";
+        proxy_cache_path /var/cache/nginx/proxy_cache levels=1:2 keys_zone=cache:10m max_size=128m inactive=1m use_temp_path=off;
+        proxy_cache_key '$scheme$request_method$proxy_host$request_uri$http_origin';
+        map $upstream_cache_status $cache_status_header {
+            'HIT'         'ingress-nginx; hit';
+            'STALE'       'ingress-nginx; hit; fwd=stale';
+            'UPDATING'    'ingress-nginx; hit; fwd=stale';
+            'MISS'        'ingress-nginx; fwd=miss; stored';
+            'EXPIRED'     'ingress-nginx; fwd=stale; stored';
+            'BYPASS'      'ingress-nginx; fwd=bypass';
+            'REVALIDATED' 'ingress-nginx; hit; fwd=stale';
+            default       'ingress-nginx; fwd=request';
+        }
+        map $http_origin $allow_origin {
+            default "*";
+            "~^https?://" "$http_origin";
+        }
+
       location-snippet: |
         proxy_cache cache;
         proxy_cache_valid 200 1s;
+        proxy_cache_use_stale updating error timeout http_500 http_502 http_503 http_504;
+        proxy_cache_background_update on;
         proxy_cache_lock on;
         proxy_ignore_headers Set-Cookie Cache-Control Expires;
-        proxy_cache_use_stale updating error timeout http_500 http_502 http_503 http_504;
-        add_header 'X-Cache-Status' $upstream_cache_status always;
-        add_header 'Access-Control-Allow-Origin' $http_origin always;
+        add_header 'Cache-Status' '$cache_status_header' always;
+        add_header 'Cache-Control' 'public, max-age=1, stale-while-revalidate=59' always;
+        add_header 'CDN-Cache-Control' 'public, max-age=1, stale-while-revalidate=59' always;
+        add_header 'Access-Control-Allow-Origin' '$allow_origin' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
         add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS' always;
         add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, Accept, Origin, X-Requested-With' always;
-        add_header 'Access-Control-Allow-Credentials' 'true' always;
         add_header 'Vary' 'Origin' always;
     dnsPolicy: ClusterFirstWithHostNet
     reportNodeInternalIp: true
