@@ -91,12 +91,12 @@ helm_ingress_nginx_helm_release_values:
             default       'ingress-nginx; fwd=request';
         }
         map $http_origin $allow_origin {
-            default "*";
             "~^https?://" "$http_origin";
+            default "*";
         }
         map $allow_origin $allow_credentials {
-            default "true";
             "*"     "";
+            default "true";
         }
 
       location-snippet: |
@@ -117,7 +117,7 @@ helm_ingress_nginx_helm_release_values:
         add_header 'Access-Control-Allow-Credentials' '$allow_credentials' always;
         add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS' always;
         add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, Accept, Origin, X-Requested-With' always;
-        add_header 'Vary' 'Origin' always;
+        add_header 'Vary' 'Accept-Encoding, Origin' always;
     dnsPolicy: ClusterFirstWithHostNet
     reportNodeInternalIp: true
     allowSnippetAnnotations: true
