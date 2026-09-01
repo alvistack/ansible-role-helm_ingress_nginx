@@ -94,6 +94,10 @@ helm_ingress_nginx_helm_release_values:
             default "*";
             "~^https?://" "$http_origin";
         }
+        map $allow_origin $allow_credentials {
+            default "true";
+            "*"     "";
+        }
 
       location-snippet: |
         proxy_cache cache;
@@ -102,11 +106,15 @@ helm_ingress_nginx_helm_release_values:
         proxy_cache_background_update on;
         proxy_cache_lock on;
         proxy_ignore_headers Set-Cookie Cache-Control Expires;
+        proxy_hide_header Cache-Control;
+        proxy_hide_header Vary;
+        proxy_hide_header Access-Control-Allow-Origin;
+        proxy_hide_header Access-Control-Allow-Credentials;
         add_header 'Cache-Status' '$cache_status_header' always;
         add_header 'Cache-Control' 'public, max-age=1, stale-while-revalidate=59' always;
         add_header 'CDN-Cache-Control' 'public, max-age=1, stale-while-revalidate=59' always;
         add_header 'Access-Control-Allow-Origin' '$allow_origin' always;
-        add_header 'Access-Control-Allow-Credentials' 'true' always;
+        add_header 'Access-Control-Allow-Credentials' '$allow_credentials' always;
         add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS' always;
         add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, Accept, Origin, X-Requested-With' always;
         add_header 'Vary' 'Origin' always;
