@@ -105,8 +105,8 @@ helm_ingress_nginx_helm_release_values:
         proxy_cache_use_stale updating error timeout http_500 http_502 http_503 http_504;
         proxy_cache_background_update on;
         proxy_cache_lock on;
-        proxy_ignore_headers Set-Cookie Cache-Control Expires;
-        proxy_hide_header Cache-Control;
+        proxy_cache_bypass $http_cookie;
+        proxy_no_cache $http_cookie;
         proxy_hide_header Vary;
         proxy_hide_header Access-Control-Allow-Origin;
         proxy_hide_header Access-Control-Allow-Credentials;
