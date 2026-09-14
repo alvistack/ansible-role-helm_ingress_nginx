@@ -101,6 +101,7 @@ helm_ingress_nginx_helm_release_values:
 
       location-snippet: |
         proxy_cache cache;
+        proxy_cache_valid 200 1s;
         proxy_cache_use_stale updating error timeout http_500 http_502 http_503 http_504;
         proxy_cache_background_update on;
         proxy_cache_lock on;
@@ -110,6 +111,8 @@ helm_ingress_nginx_helm_release_values:
         proxy_hide_header Access-Control-Allow-Origin;
         proxy_hide_header Access-Control-Allow-Credentials;
         add_header 'Cache-Status' '$cache_status_header' always;
+        add_header 'Cache-Control' 'public, max-age=1, stale-while-revalidate=59' always;
+        add_header 'CDN-Cache-Control' 'public, max-age=1, stale-while-revalidate=59' always;
         add_header 'Access-Control-Allow-Origin' '$allow_origin' always;
         add_header 'Access-Control-Allow-Credentials' '$allow_credentials' always;
         add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS' always;
