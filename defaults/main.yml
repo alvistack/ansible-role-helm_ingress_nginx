@@ -102,7 +102,6 @@ helm_ingress_nginx_helm_release_values:
         add_header 'Cache-Control' 'public, max-age=1, stale-while-revalidate=59' always;
         add_header 'CDN-Cache-Control' 'public, max-age=1, stale-while-revalidate=59' always;
         add_header 'Vary' 'Accept-Encoding, Origin' always;
-        add_header Content-Security-Policy "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; frame-ancestors 'self';" always;
     dnsPolicy: ClusterFirstWithHostNet
     reportNodeInternalIp: true
     allowSnippetAnnotations: true
