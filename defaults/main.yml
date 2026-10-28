@@ -29,7 +29,7 @@ helm_ingress_nginx_forwarded_for_header: X-Forwarded-For
 helm_ingress_nginx_forwarded_for_proxy_protocol_header: X-Forwarded-For
 
 # Defines the default IP/network address of your external load balancer.
-helm_ingress_nginx_proxy_real_ip_cidr: 224.0.0.0/4,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.1
+helm_ingress_nginx_proxy_real_ip_cidr: "224.0.0.0/4,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.1"
 
 # Enables the configuration of ngx_http_realip_module.
 helm_ingress_nginx_enable_real_ip: true
